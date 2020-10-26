@@ -1,14 +1,23 @@
-const path = require('path');
+const { resolve } = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const PORT = 4040;
 
 module.exports = {
-  entry: path.resolve(__dirname, 'index.js'),
+  entry: resolve(__dirname, 'index.js'),
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
-    publicPath: '/',
+    path: resolve(__dirname, 'dist'),
+    filename: 'js/[name].js',
+    publicPath: `http://localhost:${PORT}/`,
+    chunkFilename: 'js/[id].[chunkhash].js',
   },
   devServer: {
-    port: 8080,
+    port: PORT,
+    publicPath: '/',
+    hot: true,
+    contentBase: resolve(__dirname, 'dist'),
+    historyApiFallback: true,
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -22,6 +31,21 @@ module.exports = {
           loader: 'babel-loader',
         },
       },
+      {
+        test: /\.jpg|png|gif|woff|woff2|eot|ttf|svg|mp4|webm$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            outputPath: 'assets/',
+          },
+        },
+      },
     ],
   },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      template: resolve(__dirname, 'public/index.html'),
+    }),
+  ],
 };

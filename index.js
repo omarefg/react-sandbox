@@ -1,7 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import App from './App';
 
-const root = document.getElementById('root');
+const container = document.getElementById('app');
 
-ReactDOM.render(<App />, root);
+function renderApp() {
+  render(<App />, container);
+}
+
+renderApp();
+
+module.hot?.accept('./App', () => {
+  renderApp();
+});
