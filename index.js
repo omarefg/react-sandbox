@@ -4,12 +4,10 @@ import App from './App';
 
 const container = document.getElementById('app');
 
-function renderApp() {
-  render(<App />, container);
+render(<App />, container);
+
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    render(<App />, container);
+  });
 }
-
-renderApp();
-
-module.hot?.accept('./App', () => {
-  renderApp();
-});
